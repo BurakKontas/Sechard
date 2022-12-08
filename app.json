@@ -1,0 +1,11 @@
+{
+  "expo": {
+    "name": "Sechard",
+    "slug": "Sechard",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  },
+  "name": "Sechard"
+}
