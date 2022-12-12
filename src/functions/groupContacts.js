@@ -3,6 +3,7 @@ function isLetter(str) {
 }
 
 export function groupContacts(contacts = []) {
+    console.log(contacts)
     var contactsSorted = contacts.sort(function (a, b) {
         a = a.name.toLowerCase();
         b = b.name.toLowerCase();

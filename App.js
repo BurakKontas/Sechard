@@ -9,22 +9,54 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 //screens
 import { ContactsScreen } from './src/screens/Contacts';
 import { ContactsHeaderRight } from './src/components/ContactsHeaderRight';
-import { Provider } from 'react-native-paper';
+import { ActivityIndicator, Provider, MD2Colors } from 'react-native-paper';
 import { ContactDetailsScreen } from './src/screens/ContactDetails';
 import { ContactDetailsHeaderRight } from './src/components/ContactDetailsHeaderRight';
+import { ContactDetailsHeaderLeft } from './src/components/ContactDetailsHeaderLeft';
+import { getData, setData, clearData } from './src/functions/asyncstorage';
+import getRandomId from './src/functions/getRandomId';
+import sendNewUser from './src/functions/sendNewUser';
 
 
 const Stack = createNativeStackNavigator();
 
+async function getuid(setuid,setGotid){
+  const uid = await getData("uid");
+  if(uid == null) {
+    var id = await getRandomId(setuid);
+    var result = await sendNewUser(id);
+    await setData("uid",result.user._id);
+    setGotid(true);
+  } else {
+    setuid(uid);
+    setGotid(true)
+  }
+}
 
 export default function App() {
   const [visible, setVisible] = React.useState(false);
   const [editMode, setEditMode] = React.useState(false);
+  const [contacts, setContacts] = React.useState({});
+  const [contact, setContact] = React.useState({});
+  const [name, setName] = React.useState("")
+  const [uid, setuid] = React.useState(null);
+  const [gotid, setGotid] = React.useState(false);
 
   const showModal = () => setVisible(true);
   const hideModal = () => setVisible(false);
 
-  return (
+  const [list, setList] = React.useState({});
+
+  React.useLayoutEffect(() => {
+    getuid(setuid,setGotid)
+  },[])
+  
+ return (!gotid) 
+  ?
+  <View style={{ flex:1, justifyContent:"center" ,alignItems:"center", }}>
+    <ActivityIndicator animating={true} style={{alignSelf:"center"}} color={MD2Colors.red800} />
+  </View>
+  :
     <ToastProvider>
     <Provider>
     <NavigationContainer>
@@ -33,7 +65,7 @@ export default function App() {
         headerShadowVisible:false,
       }}>
         <Stack.Screen name="Contacts" children={props => (
-          <ContactsScreen visible={visible} onDismiss={hideModal} {...props} />
+          <ContactsScreen visible={visible} uid={uid} contacts={contacts} setContacts={setContacts} onDismiss={hideModal} {...props} />
         )}
           options={{
             headerRight:(props) => {
@@ -46,30 +78,24 @@ export default function App() {
           }}
         />
       <Stack.Screen name="ContactDetails" children={props => (
-          <ContactDetailsScreen editMode={editMode} setEditMode={setEditMode} {...props} />
+          <ContactDetailsScreen setContacts={setContacts} editMode={editMode} name={name} contact={contact} setContact={setContact} setName={setName} list={setList} setEditMode={setEditMode} {...props} />
         )}
         options={{
-          headerTitle:"",
+          headerTitle:(editMode) ? "Edit Contact" : "",
+          headerTitleAlign:"center",
           headerStyle:{
             backgroundColor:"#F3F2F7",
           },
           headerRight:(props) => {
-            return <ContactDetailsHeaderRight editMode={editMode} setEditMode={setEditMode} doneOnPress={() => {}} {...props} /> //<ContactsHeaderRight />
+            return <ContactDetailsHeaderRight editMode={editMode} setContact={setContact} setName={setName} setContacts={setContacts} setEditMode={setEditMode} list={list} {...props} /> //<ContactsHeaderRight />
           },
+          headerLeft:(props) => {
+           if(editMode) return <ContactDetailsHeaderLeft onPress={() => {setEditMode(false)}}  {...props} />
+          }
         }}
         />
       </Stack.Navigator>
     </NavigationContainer>
     </Provider>
     </ToastProvider>
-  );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});

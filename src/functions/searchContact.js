@@ -1,21 +1,19 @@
+import { groupContacts } from './groupContacts';
 import { getData } from './asyncstorage';
 
-export default async function sendNewContact(name,company,phones,mails,address) {
+export default async function searchContact(setContact = (value) => {},text = "") {
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
     var res;
     var userid = await getData("uid");
 
     var raw = JSON.stringify(
-        {
-            user: userid,
-            phones:phones,
-            emails:mails,
-            company:company,
-            name:name,
-            addresses:address
-        }
+    {
+        "userid": userid,
+        "text":text
+    }
     );
+
     var requestOptions = {
         method: 'POST',
         headers: myHeaders,
@@ -23,10 +21,11 @@ export default async function sendNewContact(name,company,phones,mails,address) 
         redirect: 'follow'
     };
 
-    await fetch("https://sechard-contacts.herokuapp.com/contact/addContact", requestOptions)
+    await fetch("https://sechard-contacts.herokuapp.com/contact/searchcontacts", requestOptions)
     .then(response => response.json())
     .then(result => {
-        res = result
+        res = result;
     })
-    return res;
+    var contacts = groupContacts(res);
+    setContact(contacts);
 }

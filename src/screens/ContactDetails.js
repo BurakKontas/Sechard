@@ -3,18 +3,19 @@ import { Text, View, TouchableOpacity, ScrollView } from 'react-native';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { IconButton, Title, ActivityIndicator, MD2Colors, Divider, Button } from 'react-native-paper';
 import getContactDetails from '../functions/getContactDetails';
+import { ContactDetailsEdit } from '../components/ContactDetailsEdit';
 
-export function ContactDetailsScreen({editMode,setEditMode}) {
+export function ContactDetailsScreen({editMode,setEditMode,setContact,contact,list,setName,name,setContacts}) {
     var route = useRoute();
     var navigation = useNavigation();
     var params = route.params;
 
-    const [contact, setContact] = React.useState({});
     const [isContactsLoaded, setIsContactsLoaded] = React.useState(false);
 
-    React.useEffect(() => {
-        setEditMode(false)
+    React.useLayoutEffect(() => {
+        setName(params.name)
         getContactDetails(setContact,setIsContactsLoaded,params.name);
+        setEditMode(false)
     }, []);
 
     return (
@@ -23,13 +24,15 @@ export function ContactDetailsScreen({editMode,setEditMode}) {
             <ActivityIndicator animating={true} style={{alignSelf:"center"}} color={MD2Colors.red800} />
         </View>
         :
-        (editMode) ?
-        <View></View> //edit mode yapılacak
+        (editMode) ? //edit mode yapılacak
+        <View>
+            <ContactDetailsEdit setContacts={setContacts} setEditMode={setEditMode} list={list} contact={contact} />
+        </View> 
         :
         <ScrollView style={{backgroundColor:"#F3F2F7",flex:1}}>
             <View style={{alignItems:"center"}}>
-                <Title>{params.name}</Title>
-                <Text style={{marginBottom:10}}>{(contact.company) ? contact.company : null}</Text>
+                <Title>{name}</Title>
+                <Text style={{marginBottom:10}}>{(contact.company != null) ? contact.company : null}</Text>
             </View>
             <View style={{flexDirection:"row",justifyContent:"space-around"}}>
                 <View style={{height:60,width:75,backgroundColor:"white",borderRadius:10,justifyContent:"center",alignItems:"center"}}>

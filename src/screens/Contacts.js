@@ -6,12 +6,15 @@ import { ActivityIndicator, MD2Colors } from 'react-native-paper';
 import getAllContacts from '../functions/getAllContacts.js'
 import { AddContactsModal } from '../components/AddContactsModal';
 import { useNavigation } from '@react-navigation/native';
+import searchContact from '../functions/searchContact';
 
-export function ContactsScreen({visible,onDismiss}) {
+export function ContactsScreen({visible,onDismiss, contacts, setContacts,uid}) {
     const [searchQuery, setSearchQuery] = React.useState('');
-    const [contacts, setContacts] = React.useState({});
     const [isContactsLoaded, setIsContactsLoaded] = React.useState(false);
-    const onChangeSearch = query => setSearchQuery(query);
+    const onChangeSearch = query => {
+        setSearchQuery(query);
+        searchContact(setContacts,query)
+    }
 
     const navigation = useNavigation();
 
@@ -20,13 +23,13 @@ export function ContactsScreen({visible,onDismiss}) {
     }, []);
 
     return (
-    (!isContactsLoaded) ?
+    (!isContactsLoaded && uid != null) ?
     <View style={{ flex:1, justifyContent:"center" ,alignItems:"center", }}>
         <ActivityIndicator animating={true} style={{alignSelf:"center"}} color={MD2Colors.red800} />
     </View>
     :
     <View style={{ flex: 1, backgroundColor: "#FFF" }}>
-        <AddContactsModal visible={visible} onDismiss={onDismiss}/>
+        <AddContactsModal setContacts={setContacts} visible={visible} onDismiss={onDismiss}/>
         <Searchbar
             style={{
                 marginHorizontal:20,
@@ -41,9 +44,9 @@ export function ContactsScreen({visible,onDismiss}) {
         <Divider style={{marginVertical:17,marginHorizontal:17.5}}/>
         <ScrollView>
         {Object.keys(contacts).map(key => {
-            if(contacts[key].length != 0)
+            if(contacts[key].length && contacts[key].length != 0)
             return (
-                <View key={"view" + key}style={{marginBottom:15}}>
+                <View key={"view" + key} style={{marginBottom:15}}>
                     <Text key={key} style={{marginHorizontal:18, color:"grey",fontSize:18}}>{key}</Text>
                     {contacts[key].map((contact) => {
                         return (

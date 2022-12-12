@@ -1,13 +1,15 @@
 import { groupContacts } from './groupContacts';
+import { getData } from './asyncstorage';
 
 export default async function getAllContacts(setContacts = (value) => {}, setIsContactsLoaded = (value) => {}) {
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
     var res;
+    var userid = await getData("uid");
 
     var raw = JSON.stringify(
     {
-        "userid": "6392150338d1d848819fc5e8"
+        "userid":userid
     }
     );
 
