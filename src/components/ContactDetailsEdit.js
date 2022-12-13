@@ -11,7 +11,8 @@ export function ContactDetailsEdit({contact, list,setContacts}) {
     const [company,setCompany] = React.useState((contact.company != null) ? contact.company : null)
 
     const [phoneList, setPhoneList] = React.useState(contact.phones)
-    const [mailList, setMailList] = React.useState( (contact.mails) ? contact.mails : []);
+    const [mailList, setMailList] = React.useState((contact.emails) ? contact.emails : []);
+    console.log(contact)
     const [addressList, setAddressList] = React.useState(contact.addresses) 
     
     const [phoneListLength, setPhoneListLength] = React.useState(contact.phones.length)
