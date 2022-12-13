@@ -2,7 +2,7 @@
 
 Just download code and write ```npm install``` or ```yarn```.
 
-Create ```config.js``` file and add your firebase config in it
+Create ```config.js``` file in main directory (near app.js) and add your firebase config in it
 
 Example:
 
@@ -17,3 +17,5 @@ export const firebaseConfig = {
     measurementId: "your-id"
   };
 ```
+
+Then write ```yarn web``` ```expo start --web``` on terminal.
