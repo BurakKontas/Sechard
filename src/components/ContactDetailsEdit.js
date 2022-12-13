@@ -169,7 +169,7 @@ export function ContactDetailsEdit({contact, list,setContacts}) {
             </View>
             <View style={{backgroundColor:"#FFF",paddingTop:15,paddingHorizontal:15,paddingBottom:10,marginHorizontal:10,borderRadius:10,marginTop:20}}>
                 <TouchableOpacity onPress={() => {
-                    deleteContact(name,setContacts)
+                    deleteContact(contact.name,setContacts)
                     navigation.goBack();
                 }}>
                     <Text style={{color:"red",marginBottom:10,fontSize:18,alignSelf:"center"}}>Delete Contact</Text>
