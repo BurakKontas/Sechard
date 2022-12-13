@@ -47,8 +47,8 @@ export function AddContactsModal({visible, onDismiss, setContacts}) {
                     //burda direk api ye göndericez api den gelen cevapta error false ise devam edecek değil ise hata vericez
                 }}>Done</Button>
             </View>
-            <View style={{paddingHorizontal:"2.5%", backgroundColor:"white",marginTop:20}}>
-                <TextInput style={{height:50,minWidth:"100%"}} placeholder={"Name"} onChangeText={(text) => {setName(text)}} />
+            <View style={{paddingHorizontal:"2.5%", backgroundColor:"white",marginTop:20,width:"100vw"}}>
+                <TextInput style={{height:50,width:"100%"}} placeholder={"Name"} onChangeText={(text) => {setName(text)}} />
                 <Divider />
                 <TextInput style={{height:50,minWidth:"100%"}} placeholder={"Company"} onChangeText={(text) => setCompany(text)} />
             </View>

@@ -3,7 +3,7 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { ToastProvider } from 'react-native-toast-notifications';
 
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 //screens
@@ -22,9 +22,11 @@ const Stack = createNativeStackNavigator();
 
 async function getuid(setuid,setGotid){
   const uid = await getData("uid");
+  console.log(uid)
   if(uid == null) {
     var id = await getRandomId(setuid);
-    var result = await sendNewUser(id);
+    var result = await sendNewUser();
+    console.log(result)
     await setData("uid",result.user._id);
     setGotid(true);
   } else {
@@ -90,7 +92,7 @@ export default function App() {
             return <ContactDetailsHeaderRight editMode={editMode} setContact={setContact} setName={setName} setContacts={setContacts} setEditMode={setEditMode} list={list} {...props} /> //<ContactsHeaderRight />
           },
           headerLeft:(props) => {
-           if(editMode) return <ContactDetailsHeaderLeft onPress={() => {setEditMode(false)}}  {...props} />
+           return <ContactDetailsHeaderLeft onPress={() => {setEditMode(false)}} editMode={editMode} {...props} />
           }
         }}
         />

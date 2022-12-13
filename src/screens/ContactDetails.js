@@ -31,7 +31,7 @@ export function ContactDetailsScreen({editMode,setEditMode,setContact,contact,li
         :
         <ScrollView style={{backgroundColor:"#F3F2F7",flex:1}}>
             <View style={{alignItems:"center"}}>
-                <Title>{name}</Title>
+                <Title style={{color:"black"}}>{name}</Title>
                 <Text style={{marginBottom:10}}>{(contact.company != null) ? contact.company : null}</Text>
             </View>
             <View style={{flexDirection:"row",justifyContent:"space-around"}}>
