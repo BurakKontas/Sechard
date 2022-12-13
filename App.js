@@ -17,6 +17,10 @@ import { getData, setData, clearData } from './src/functions/asyncstorage';
 import getRandomId from './src/functions/getRandomId';
 import sendNewUser from './src/functions/sendNewUser';
 
+//firebase
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+import { firebaseConfig } from './config';
 
 const Stack = createNativeStackNavigator();
 
@@ -36,6 +40,12 @@ async function getuid(setuid,setGotid){
 }
 
 export default function App() {
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+
+
+
   const [visible, setVisible] = React.useState(false);
   const [editMode, setEditMode] = React.useState(false);
   const [contacts, setContacts] = React.useState({});

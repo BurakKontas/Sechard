@@ -57,3 +57,4 @@ dist/
 
 # Images
 Images/
+/config.js
